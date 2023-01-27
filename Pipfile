@@ -4,7 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-jsbeautifier = "*"
+jsbeautifier = "==1.14.7"
+editorconfig = "==0.12.3"
+six = "==1.16.0"
 
 [dev-packages]
 
