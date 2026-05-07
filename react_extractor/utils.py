@@ -1,23 +1,10 @@
 
-import os 
+import logging
+import os
 from os import path
 import shutil
 
-def log(message, is_warning=False):
-    """"
-    This function prints a message to the console.
-    
-    Parameters:
-        message (str): The message to print.
-        is_warning (bool): If True, the message will be printed as a warning.
-        
-    Returns:
-        None
-    """
-    if is_warning:
-        print("[!] " + message)
-    else:
-        print("[*] " +  message)
+logger = logging.getLogger(__name__)
 
 def is_binary_exists(file):
     """"
@@ -93,6 +80,20 @@ def is_react(filepath, project_dir):
         return True
     else:
         return False
+
+
+def check_tools():
+    """
+    This function check if tools are installed in the
+    system.
+
+    Necessary tools: apktool
+
+    """
+    if not is_binary_exists("apktool"):
+        logger.warning("apktool is not installed or not in PATH")
+        return False
+    return True
 
 def banner():
 

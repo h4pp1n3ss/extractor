@@ -1,10 +1,12 @@
 
+import logging
 import subprocess
-from react_extractor.utils import  log
 from react_extractor.exceptions import ExecutionFailedException
 import os, re, sys
 from time import sleep
 import jsbeautifier as jb
+
+logger = logging.getLogger(__name__)
 
 
 def apk_decompile(filename):
@@ -16,7 +18,15 @@ def apk_decompile(filename):
         ExecutionFailedException: If apktool fails to execute.
 
     """
-    command = "apktool d {} -o {}".format(filename, filename.replace(".apk", "_out"))
+    command = [
+        "apktool",
+        "d",
+        filename,
+        "-o",
+        filename.replace(".apk", "_out")
+    ]
+
+    # command = "apktool d {} -o {}".format(filename, filename.replace(".apk", "_out"))
     output = subprocess.getoutput(command)
     if 'Exception in' in output:
         raise ExecutionFailedException('''\
@@ -40,7 +50,7 @@ def extract_android_bundle(file, out_path="./index.bundle.out"):
             f.write(js)
         return True
     except Exception as err:
-        print(f"Unexpected {err=}, {type(err)=}")
+        logger.exception("Unexpected error during bundle extraction: %s", err)
         raise
 
 def extract_endpoints(file):
